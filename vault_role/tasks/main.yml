@@ -1,0 +1,4 @@
+---
+# tasks file for vault_role
+
+  - include_tasks: vault_debian.yml

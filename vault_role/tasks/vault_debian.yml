@@ -1,0 +1,49 @@
+---
+  
+
+
+      - name: create hashicorp.list file
+        ansible.builtin.file:
+          path: /etc/apt/sources.list.d/hashicorp.list
+          owner: root
+          group: root
+          mode: '0644'
+          state: touch
+
+      - name: Create a directory if it does not exist
+        ansible.builtin.file:
+         path: /opt/vault/.vault/data
+         state: directory
+         mode: '0755'      
+
+      - name: Template a file to /etc/file.conf
+        ansible.builtin.template:
+           src: config.hcl.j2
+           dest: /etc/vault.d/vault.hcl
+           owner: root
+           group: root
+           mode: '0644'     
+
+
+      - name: adding hashi corp repo
+        ansible.builtin.get_url:
+             url: https://apt.releases.hashicorp.com/gpg
+             dest: /etc/apt/trusted.gpg.d/hashicorp-archive-keyring.asc
+
+        
+      - name: somerepo | apt source
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+          state: present
+
+      - name: Install vault
+        ansible.builtin.apt:
+          update_cache: yes
+          name: vault
+          state: present
+
+
+
+      - name: start vault in the background 
+        shell: nohup vault server -config=/etc/vault.d/vault.hcl &
+

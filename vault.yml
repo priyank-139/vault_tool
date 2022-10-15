@@ -1,0 +1,6 @@
+---
+  - hosts: vault_deb
+    remote_user: ubuntu
+    become: yes
+    roles: 
+        - role: vault_role
