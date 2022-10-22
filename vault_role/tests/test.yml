@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: 54.191.168.48
   remote_user: root
   roles:
     - vault_role
