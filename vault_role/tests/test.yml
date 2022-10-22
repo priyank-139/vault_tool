@@ -1,5 +1,5 @@
 ---
-- hosts: 54.191.168.48
+- hosts: 35.92.54.163
   remote_user: root
   roles:
     - vault_role
